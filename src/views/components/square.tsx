@@ -7,13 +7,13 @@ interface SquareProps {
   boardNumber: number
 }
 
-function Square(props: SquareProps) {
+const Square: React.FC<SquareProps> = ({ value, onClick }) => {
   const handler = () => {
-    props.onClick()
+    onClick()
   }
   return (
     <button className="square" onClick={handler}>
-      {props.value}
+      {value}
     </button>
   )
 }
