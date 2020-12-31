@@ -1,9 +1,15 @@
 import React from 'react'
 import Square from './square'
+import { SquareType } from '../../types/interface'
 
-const boardNumbers = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+interface BoardProps {
+  squares: SquareType[]
+  onClick: (i: number) => void
+}
 
-function Board(props) {
+const boardNumbers: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+
+function Board(props: BoardProps) {
   return (
     <div className="board-row">
       { boardNumbers.map((boardNumber, i) => {

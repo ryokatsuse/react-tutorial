@@ -1,6 +1,13 @@
 import React from 'react'
+import { SquareType } from '../../types/interface'
 
-function Square(props) {
+interface SquareProps {
+  value: SquareType
+  onClick: () => void
+  boardNumber: number
+}
+
+function Square(props: SquareProps) {
   const handler = () => {
     props.onClick()
   }

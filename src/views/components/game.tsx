@@ -1,9 +1,16 @@
 import React from 'react'
 import Board from "./board";
 import { calculateWinner } from '../../utils/calclateWinner';
+import { History } from '../../types/interface'
 
-class Game extends React.Component {
-  constructor(props) {
+interface State {
+  history: History[];
+  stepNumber: number;
+  xIsNext: boolean;
+}
+
+class Game extends React.Component<{}, State> {
+  constructor(props: {}) {
     super(props)
     this.state = {
       history: [{
@@ -14,7 +21,7 @@ class Game extends React.Component {
     }
   }
 
-  handleClick(i) {
+  handleClick(i: number) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1)
     const current = history[history.length - 1]
     const squares = current.squares.slice()
@@ -31,10 +38,10 @@ class Game extends React.Component {
     });
   }
 
-  jumpTo(step) {
+  jumpTo(step: number) {
     this.setState({
       stepNumber: step,
-      xISNext: (step % 2) === 0
+      xIsNext: (step % 2) === 0
     })
   }
 
@@ -63,7 +70,7 @@ class Game extends React.Component {
         <div className="game-board">
         <Board
           squares={current.squares}
-          onClick={(i) => this.handleClick(i)}
+          onClick={(i: number) => this.handleClick(i)}
         />
         </div>
         <div className="game-info">

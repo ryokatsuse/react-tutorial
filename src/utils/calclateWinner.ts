@@ -1,4 +1,6 @@
-export const calculateWinner = (squares: any[]) => {
+import { SquareType } from '../types/interface'
+
+export const calculateWinner = (squares: Array<SquareType>) => {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
