@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import Board from "./board"
+import Moves from "./moves"
 import { calculateWinner } from '../../utils/calclateWinner'
 import { History } from '../../types/interface'
 
@@ -30,14 +31,6 @@ const Game: React.FC = () => {
 
   const current = history[stepNumber];
   const winner = calculateWinner(current.squares)
-  const moves = history.map((step, move) => {
-  const desc = move ? `Go to move # ${move}` : "Go to game start"
-    return (
-      <li key={move}>
-        <button onClick={() => jumpTo(move)}>{desc}</button>
-      </li>
-    );
-  });
   let status;
   if (winner) {
     status = "Winner: " + winner
@@ -54,7 +47,7 @@ const Game: React.FC = () => {
       </div>
       <div className="game-info">
         <div>{status}</div>
-        <ol>{moves}</ol>
+        <Moves history={history} jumpTo={jumpTo} />
       </div>
     </div>
   )
