@@ -1,27 +1,29 @@
 import React, { useState } from "react"
+import { useRecoilState } from "recoil";
 import Board from "./board"
 import Moves from "./moves"
 import { calculateWinner } from '../../utils/calclateWinner'
 import { History } from '../../types/interface'
+import { stepNumber, historyItems, xIsNext } from '../../atom/index'
 
 const Game: React.FC = () => {
   // Hooks
-  const [history, setHistory] = useState<History[]>([{ squares: Array(9).fill(null)}])
-  const [stepNumber, setStepNumber] = useState<number>(0)
-  const [xIsNext, setXIsNext] = useState<boolean>(true)
+  const [history, setHistory] = useRecoilState<History[]>(historyItems)
+  const [step, setStepNumber] = useRecoilState<number>(stepNumber);
+  const [_xIsNext, setXIsNext] = useRecoilState<boolean>(xIsNext)
 
   const handleClick = (i: number) => {
     // 変数名かぶるのでアンスコ付きにする。
-    const _history = history.slice(0, stepNumber + 1)
+    const _history = history.slice(0, step + 1)
     const current = _history[_history.length - 1]
     const squares = current.squares.slice()
     if (calculateWinner(squares) || squares[i]) {
       return
     }
-    squares[i] = xIsNext ? "X" : "O";
+    squares[i] = _xIsNext ? "X" : "O";
     setHistory(_history.concat([{ squares: squares }]))
     setStepNumber(_history.length)
-    setXIsNext(!xIsNext)
+    setXIsNext(!_xIsNext)
   }
 
   const jumpTo = (step: number) => {
@@ -29,13 +31,13 @@ const Game: React.FC = () => {
     setXIsNext(step % 2 === 0)
   }
 
-  const current = history[stepNumber];
+  const current = history[step];
   const winner = calculateWinner(current.squares)
   let status;
   if (winner) {
     status = "Winner: " + winner
   } else {
-    status = 'Next player: ' + (xIsNext ? 'X' : 'O')
+    status = 'Next player: ' + (_xIsNext ? 'X' : 'O')
   }
   return (
     <div className="game">
