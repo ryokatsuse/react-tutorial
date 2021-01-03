@@ -1,17 +1,16 @@
-import Game from "./views/components/game";
-import './App.css';
+import Game from "./views/components/game"
 import {
   RecoilRoot
-} from 'recoil';
+} from 'recoil'
 
 function App() {
   return (
     <RecoilRoot>
-    <div className="App">
-      <Game />
-    </div>
+      <div className="App">
+        <Game />
+      </div>
     </RecoilRoot>
   );
 }
 
-export default App;
+export default App

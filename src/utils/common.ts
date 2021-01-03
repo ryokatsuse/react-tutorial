@@ -19,3 +19,23 @@ export const calculateWinner = (squares: Array<SquareType>) => {
   }
   return null
 }
+
+export const hasResultWinner = (winner: SquareType, _xIsNext: boolean) => {
+  if (winner) {
+    return `Winner: ${winner}`
+  } else {
+    return `Next player: ${(_xIsNext ? 'X' : 'O')}`
+  }
+}
+
+export const immutableSquaresData = (
+  squares: SquareType[],
+  _xIsNext: boolean,
+  i: number
+) =>
+  squares.map((square, index) => {
+    if(i === index) {
+      return _xIsNext ? 'X' : 'O'
+    }
+    return square
+  })

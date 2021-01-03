@@ -1,28 +1,31 @@
-import React, { useState } from "react"
-import { useRecoilState } from "recoil";
+import React from "react"
+import { useRecoilState } from "recoil"
 import Board from "./board"
 import Moves from "./moves"
-import { calculateWinner } from '../../utils/calclateWinner'
+import {
+  calculateWinner,
+  hasResultWinner,
+  immutableSquaresData
+} from '../../utils/common'
 import { History } from '../../types/interface'
 import { stepNumber, historyItems, xIsNext } from '../../atom/index'
 
 const Game: React.FC = () => {
-  // Hooks
+  // Recoil
   const [history, setHistory] = useRecoilState<History[]>(historyItems)
-  const [step, setStepNumber] = useRecoilState<number>(stepNumber);
+  const [step, setStepNumber] = useRecoilState<number>(stepNumber)
   const [_xIsNext, setXIsNext] = useRecoilState<boolean>(xIsNext)
 
   const handleClick = (i: number) => {
-    // 変数名かぶるのでアンスコ付きにする。
-    const _history = history.slice(0, step + 1)
-    const current = _history[_history.length - 1]
-    const squares = current.squares.slice()
-    if (calculateWinner(squares) || squares[i]) {
+    const _squares = history[step]?.squares
+    if (calculateWinner(_squares) || _squares[i]) {
       return
     }
-    squares[i] = _xIsNext ? "X" : "O";
-    setHistory(_history.concat([{ squares: squares }]))
-    setStepNumber(_history.length)
+    const squares = immutableSquaresData(_squares, _xIsNext, i)
+    const newHistory = [...history, { squares }]
+
+    setHistory(newHistory)
+    setStepNumber(history.length)
     setXIsNext(!_xIsNext)
   }
 
@@ -31,14 +34,10 @@ const Game: React.FC = () => {
     setXIsNext(step % 2 === 0)
   }
 
-  const current = history[step];
+  const current = history[step]
   const winner = calculateWinner(current.squares)
-  let status;
-  if (winner) {
-    status = "Winner: " + winner
-  } else {
-    status = 'Next player: ' + (_xIsNext ? 'X' : 'O')
-  }
+  
+  const status = hasResultWinner(winner, _xIsNext)
   return (
     <div className="game">
       <div className="game-board">
